@@ -1,0 +1,5 @@
+{
+    "require": {
+        "philmprice/phalcon-blocks": "1.*"
+    }
+}

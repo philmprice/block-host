@@ -1,0 +1,1 @@
+This is an idea I'm working on, and github is a great place to have a repo. Sooo... more to come as things shape up.
