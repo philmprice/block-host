@@ -1,0 +1,3 @@
+class AppBlock extends Block
+{
+}
