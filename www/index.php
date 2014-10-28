@@ -1,33 +1,35 @@
 <?
 
 ////////////////////////////
-//  LOADER
+//  LOADER directories
+$loaderDirArray = array(
+                    '../controllers/',
+                    '../models/',
+                    '../php/objects/'
+                );
 
 $loader = new \Phalcon\Loader();
-$loader->registerDirs(
-    array(
-        '../app/controllers/',
-        '../app/models/'
-    )
-)->register();
+
+$loader->registerDirs($loaderDirArray)->register();
+
+////////////////////////////
+//  VIEW directories
+$viewDirArray = array();
 
 ////////////////////////////
 //  DEPENDENCY INJECTOR
-
 $di = new Phalcon\DI();
 $di->set('dispatcher',  $dispatcher = new \Phalcon\Mvc\Dispatcher());
 $di->set('response',    $response   = new \Phalcon\Http\Response());
 $di->set('request',     $request    = new \Phalcon\Http\Request());
 $di->set('router',      $router     = new \Phalcon\Mvc\Router());
 
-//  views
-$di->set('view', function(){
-    $view = new \Phalcon\Mvc\View();
-    $view->setViewsDir('../app/views/');
-    return $view;
-});
+////////////////////////////
+//  START VIEW 
 
-//  base uri
+
+////////////////////////////
+//  ROOT
 $di->set('url', function(){
     $url = new \Phalcon\Mvc\Url();
     $url->setBaseUri('/');
@@ -36,14 +38,52 @@ $di->set('url', function(){
 
 ////////////////////////////
 //  ROUTER
-
 $router->add(
-    "/second", 
+    "/404", 
     array(
         'controller'    => 'index',
-        'action'        => 'second',
+        'action'        => 'four04',
     )
 );
+
+////////////////////////////
+//  BOOTSTRAP other blocks
+$blockFolderArray = Block::getBlockFolderArray();
+foreach($blockFolderArray AS $blockFolder)
+{
+    //  IF block folder's bootstrap file exists
+    if(file_exists($blockFolder.'bootstrap.php'))
+    {
+        //  RUN boostrap for block
+        require_once($blockFolder.'bootstrap.php');
+    }
+}
+
+////////////////////////////
+//  COMMIT LOADER
+$loader = new \Phalcon\Loader();
+$loader->registerDirs($loaderDirArray)->register();
+
+////////////////////////////
+//  COMMIT VIEW
+
+$di->set('view', function (){
+    $view = new \Phalcon\Mvc\View();
+
+    $view->setViewsDir('../views/');
+    
+    global $viewDirArray;
+    foreach($viewDirArray AS $viewDir)
+    {
+        $view->setPartialsDir($viewDir);
+    }
+
+    $view->registerEngines(array(
+        ".volt" => 'Phalcon\Mvc\View\Engine\Volt'
+    ));
+    
+    return $view;
+});
 
 try {
     
