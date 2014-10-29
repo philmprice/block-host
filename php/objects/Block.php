@@ -1,13 +1,13 @@
-<?
+<?php
 
 class Block
 {
     static $folderArray = array();
     
-    public function getBlockFolderArray()
+    public static function getBlockFolderArray()
     {
         //  INIT
-        $blockSuffix    = '-block';
+        $blockSuffix    = 'block-';
         $allBlockPath   = '../../';
         $folderArray    = array();
         
@@ -20,9 +20,9 @@ class Block
             //  IF entry is valid block folder
             if($entry != '.'
             && $entry != '..'
-            && $entry != 'phalcon-blocks'
+            && $entry != 'block-host'
             && is_dir($allBlockPath.$entry)
-            && strpos($entry, $blockSuffix) == (strlen($entry)-strlen($blockSuffix)))
+            && strpos($entry, $blockSuffix) == 0)
             {
                 //  STORE block folder
                 self::$folderArray[]  = $allBlockPath.$entry.'/';

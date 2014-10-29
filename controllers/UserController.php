@@ -1,4 +1,4 @@
-<?
+<?php
 
 class UserController extends \Phalcon\Mvc\Controller
 {

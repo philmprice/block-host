@@ -7,13 +7,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Website Design and Web Development - Seattle, Tacoma, Spokane WA</title>
-	<meta name="generator" content="GearBox 1.6 CMS by SiteCrafting, Inc." />
-	<meta name="description" content="SiteCrafting is your trusted partner, guiding your web success. We offer website design, development, content management, and strategy solutions, with offices in Tacoma, Seattle and Spokane, WA." />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="canonical" href="http://sitecrafting.com/" />
+	<title>Block Host</title>
     <link rel="stylesheet" href="" media="screen" type="text/css" />
-    <script src="" type="text/javascript"></script>
+    <script src="../css/" type="text/javascript"></script>
 </head>
 
 <body>
@@ -21,8 +17,8 @@
 {{ bodyContent }}
 {% endblock %}
 
-<p>
-{% include 'page-module-block/pageModule.twig' %}
+<p>asdf
+{% include 'block-module-pages/pageModule.volt' %}
 </p>
 
 <p>
