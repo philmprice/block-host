@@ -12,11 +12,19 @@ require_once 'php/functions/functions.php';
 
 
 ////////////////////////////
+//  SERVER
+define('SERVER', 'dev');
+// define('SERVER', 'live');
+
+
+////////////////////////////
 //  DEFINITIONS
-define('ABS_TO_HOST_PATH', '__core__\philmprice\block-host');
+define('ABS_TO_HOST_PATH',  '__core__\philmprice\block-host');
 define('HOST_ROOT',         realpath(dirname(__FILE__)));
 define('PROJ_HOST_ROOT',    str_replace('__core__', 'project', HOST_ROOT));
 define('ABS_ROOT',          str_replace(ABS_TO_HOST_PATH,'',HOST_ROOT));
+define('HOST_VENDOR',       'philmprice');
+define('HOST_BLOCK',        'block-host');
 
 
 ////////////////////////////
@@ -30,6 +38,14 @@ $loaderNamespaceArray = array();
 
 $loader = new \Phalcon\Loader();
 $loader->registerDirs($loaderDirArray)->register();
+
+
+////////////////////////////
+//  SYNC PROJECT FOLDER
+if(SERVER == 'dev')
+{
+    Extender::SyncProjectFolder();
+}
 
 
 ////////////////////////////
@@ -123,10 +139,10 @@ $di->set('twigService', function($view, $di) use ($config) {
     $arrFolder  = array('../views/');
     $twig       = new \Phalcon\Mvc\View\Engine\Twig($view, $di, $options, $arrFolder);
 
+    /*
     //  create twig function 'inc' and register it
     $function   = new Twig_SimpleFunction('inc', function(Twig_Environment $env, $context, $template, $variables = array(), $withContext = true, $ignoreMissing = false, $sandboxed = false) {
         
-        /*
         //  GET json filename
         $jsonFilename           = str_replace('.twig', '.json', $template);
         
@@ -145,7 +161,6 @@ $di->set('twigService', function($view, $di) use ($config) {
                 }
             }
         }
-        */
 
         //  GET paths for project verion of twig view
         $templateFilePath = HOST_ROOT.'/views/project/'.$template;
@@ -165,6 +180,7 @@ $di->set('twigService', function($view, $di) use ($config) {
 
     //  register the function we just created
     $twig->getTwig()->addFunction($function);
+    */
 
     return $twig;
 
@@ -183,21 +199,8 @@ $di->set('view', function (){
 
         /*
         ,".volt" => function($view, $di) {
-
-            //  create volt
             $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
-            
-            // set  options
-            $volt->setOptions(array(
-              'compileAlways' => true  
-            ));
-
-            //  add filters
-            $volt->getCompiler()->addFilter('p', function($resolvedArgs, $exprArgs) {
-
-                return "project/sub-view.volt";
-            });
-
+            $volt->setOptions(array('compileAlways' => true));
             return $volt;
         }
         */

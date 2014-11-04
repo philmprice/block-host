@@ -19,6 +19,7 @@ class File
                 //  IF entry is valid block folder
                 if($entry != '.'
                 && $entry != '..'
+                && strpos($entry, '.') !== 0
                 && is_dir($parentFolder.'/'.$entry))
                 {
                     //  BUILD path
@@ -32,6 +33,71 @@ class File
 
                     //  STORE sub folder paths
                     $folderArray    = array_merge($folderArray, $subFolderArray);
+                }
+            }
+            
+            //  CLOSE directory
+            $d->close();
+        }
+
+        return $folderArray;
+    }
+
+    public static function getFolderPathsAt($parentFolder)
+    {
+        //  INIT
+        $folderArray    = array();
+        $parentFolder   = rtrim($parentFolder, '/\\');
+
+        if(is_dir($parentFolder))
+        {
+            //  GET directory
+            $d = dir($parentFolder);
+            
+            //  FOR each entry
+            while (false !== ($entry = $d->read())) 
+            {
+                //  IF entry is valid block folder
+                if($entry != '.'
+                && $entry != '..'
+                && is_dir($parentFolder.'/'.$entry))
+                {
+                    //  BUILD path
+                    $folderPath     = $parentFolder.'/'.$entry.'/';
+
+                    //  STORE path
+                    $folderArray[]  = $folderPath;
+                }
+            }
+            
+            //  CLOSE directory
+            $d->close();
+        }
+
+        return $folderArray;
+    }
+
+    public static function getFoldersAt($parentFolder)
+    {
+        //  INIT
+        $folderArray    = array();
+        $parentFolder   = rtrim($parentFolder, '/\\');
+
+        if(is_dir($parentFolder))
+        {
+            //  GET directory
+            $d = dir($parentFolder);
+            
+            //  FOR each entry
+            while (false !== ($entry = $d->read())) 
+            {
+                //  IF entry is valid block folder
+                if($entry != '.'
+                && $entry != '..'
+                && is_dir($parentFolder.'/'.$entry))
+                {
+                    //  STORE path
+                    $folderArray[]  = $entry;
                 }
             }
             
@@ -76,10 +142,13 @@ class File
     public static function ensurePath($targetPath)
     {
         //  path token array
-        $pathArray  = explode('/', trim($targetPath,'/'));
+        $targetPathClean    = str_replace('\\','/',$targetPath);
+        $pathArray          = explode('/', trim($targetPathClean,'/'));
+
+        //  TODO: make this function ensure full path, yo
 
         //  start current path
-        $currentPath    = $pathArray[0];
+        $currentPath        = $pathArray[0];
 
         for($i = 1 ; $i < sizeof($pathArray) ; $i++)
         {

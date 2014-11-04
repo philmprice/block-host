@@ -4,6 +4,45 @@ class Extender
 {
     static $platformPath  = '../../../../../../';
 
+    public static function syncProjectFolder()
+    {
+        //  init
+        $blockFolderArray   = array();
+
+        //  get vendor folder array
+        $vendorFolderArray  = File::getFoldersAt(ABS_ROOT.'__core__');
+
+        //  process vendor folders
+        foreach($vendorFolderArray AS $vendorFolder)
+        {
+            //  get vendor sub folder array
+            $vendorSubFolderArray   = File::getFoldersAt(ABS_ROOT.'__core__/'.$vendorFolder);
+
+            //  process vendor sub folder array
+            foreach($vendorSubFolderArray AS $vendorSubFolder)
+            {
+                //  if vendor sub folder is a block
+                if(strpos($vendorSubFolder, 'block-') === 0)
+                {
+                    $blockFolderArray[] = $vendorFolder.'/'.$vendorSubFolder;
+                }
+            }
+        }
+
+        // process block folder array
+        foreach($blockFolderArray AS $blockFolder)
+        {
+            //  extend this block folder
+            self::extend($blockFolder);
+
+            //  ensure symbolic links are in place
+                //  views
+                //  controllers
+                //  objects
+                //  models
+        }
+    }
+
     public static function extend($vendorPath)
     {
         //  core root
@@ -69,6 +108,7 @@ class Extender
 
     public static function extendModelFile($corePath, $file)
     {
+        /*
         //  if file exists
         if(file_exists($corePath.$file))
         {
@@ -82,6 +122,7 @@ class Extender
         {
             throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
         }
+        */
     }
 
     public static function extendTwigViewFile($corePath, $file)
@@ -91,15 +132,13 @@ class Extender
         {
             //  ensure destination path
             $projectPath        = str_replace('__core__', 'project', $corePath);
+            $vendorRoot         = ABS_ROOT.'project/'.HOST_VENDOR.'/';
+            $blockName          = str_replace(array($vendorRoot, 'views/'), '', $projectPath);
             File::ensurePath($projectPath);
 
             //  set template vars
-            $namespace          = File::getNamespaceFromFile($corePath.$file);
-            $class              = str_replace('Core.php', '', $file);
-            $projectFile        = str_replace('Core', '', $file);
-            $coreClass          = str_replace('.php', '', $file);
-            $classPath          = $namespace.'\\'.$coreClass;
-            $methodPhpArray     = array();
+            $projectFile        = str_replace('.core', '', $file);
+            $coreTwig           = $blockName.'core/'.$projectFile;
 
             //  start buffer
             ob_start();
@@ -121,6 +160,7 @@ class Extender
 
     public static function extendControllerFile($corePath, $file)
     {
+        /*
         //  if file exists
         if(file_exists($corePath.$file))
         {
@@ -137,6 +177,7 @@ class Extender
         {
             throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
         }
+        */
     }
 
     public static function extendObjectFile($corePath, $file)

@@ -1,1 +1,1 @@
-{% extends 'yourMom' %}
+{% extends '<?= $coreTwig ?>' %}
