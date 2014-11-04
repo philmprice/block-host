@@ -46,7 +46,7 @@ class Extender
                 //  IF twig view file
                 elseif((strpos($parentFolder, '/views/') !== false) && ($extension == 'twig'))
                 {
-                    self::extendVoltViewFile($parentFolder, $file);
+                    self::extendTwigViewFile($parentFolder, $file);
                 }
                 //  IF controller file
                 elseif((strpos($parentFolder, '/controllers/') !== false) && ($extension == 'php'))
@@ -84,16 +84,34 @@ class Extender
         }
     }
 
-    public static function extendVoltViewFile($corePath, $file)
+    public static function extendTwigViewFile($corePath, $file)
     {
         //  if file exists
         if(file_exists($corePath.$file))
         {
-            $fileContent    = file_get_contents($corePath.$file);
-            $projectPath    = str_replace('__core__', 'project', $corePath);
-
+            //  ensure destination path
+            $projectPath        = str_replace('__core__', 'project', $corePath);
             File::ensurePath($projectPath);
-            file_put_contents($projectPath.$file, $fileContent);
+
+            //  set template vars
+            $namespace          = File::getNamespaceFromFile($corePath.$file);
+            $class              = str_replace('Core.php', '', $file);
+            $projectFile        = str_replace('Core', '', $file);
+            $coreClass          = str_replace('.php', '', $file);
+            $classPath          = $namespace.'\\'.$coreClass;
+            $methodPhpArray     = array();
+
+            //  start buffer
+            ob_start();
+
+            //  run php template
+            require(HOST_ROOT.'/php/objects/Extender/twig.template.php');
+
+            //  get content and end buffer
+            $extendedFileContent = ob_get_clean();
+
+            //  write destination 
+            file_put_contents($projectPath.$projectFile, $extendedFileContent);
         }
         else
         {

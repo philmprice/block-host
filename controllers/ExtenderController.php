@@ -7,9 +7,6 @@ class ExtenderController extends BaseController
 		//	send debug vars to view
 		$this->debugToView();
 
-		//	debug test
-		// $this->view->foo 	= Block\Module\Pages\Foo::Bar();
-
 		//	extend requested folder
     	Extender::extend($this->dispatcher->getParam('path'));
 	}
