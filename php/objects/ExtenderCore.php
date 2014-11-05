@@ -198,64 +198,70 @@ class ExtenderCore
             $coreClass          = str_replace('.php', '', $file);
             $classPath          = $namespace.'\\'.$coreClass;
             $methodPhpArray     = array();
-            $methodTypeString   = '';
 
-            try
+            //  if project file doesn't exist, create it
+            if(!file_exists($projectPath.$projectFile))
             {
-                if(class_exists($classPath, true))
+                try
                 {
-                    $reflection = new \ReflectionClass($classPath);
+                    if(class_exists($classPath, true))
+                    {
+                        $reflection = new \ReflectionClass($classPath);
+                    }
+                    else
+                    {
+                        debug('class does not exist: '.$classPath);
+                    }
                 }
-                else
+                catch(Exception $e)
                 {
-                    debug('class does not exist: '.$classPath);
-                }
-            }
-            catch(Exception $e)
-            {
-                // outcomeds handled below
-                debug('could not create class '.$classPath);
-            }
-
-            if(is_object($reflection))
-            {
-                //  get methods
-                $methods['all']         = $reflection->getMethods();
-                $methods['abstract']    = $reflection->getMethods(\ReflectionMethod::IS_ABSTRACT);
-                $methods['final']       = $reflection->getMethods(\ReflectionMethod::IS_FINAL);
-                $methods['public']      = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
-                $methods['private']     = $reflection->getMethods(\ReflectionMethod::IS_PRIVATE);
-                $methods['protected']   = $reflection->getMethods(\ReflectionMethod::IS_PROTECTED);
-                $methods['static']      = $reflection->getMethods(\ReflectionMethod::IS_STATIC);
-
-                foreach($methods['all'] AS $method)
-                {
-                    //  build method type string
-                    $methodTypeString  .= in_array($method, $methods['abstract'])    ? 'abstract '   : '';
-                    $methodTypeString  .= in_array($method, $methods['final'])       ? 'final '      : '';
-                    $methodTypeString  .= in_array($method, $methods['public'])      ? 'public '     : '';
-                    $methodTypeString  .= in_array($method, $methods['private'])     ? 'private '    : '';
-                    $methodTypeString  .= in_array($method, $methods['protected'])   ? 'protected '  : '';
-                    $methodTypeString  .= in_array($method, $methods['static'])      ? 'static '     : '';
-
-                    //  store method info
-                    $methodInfoArray[]  = array(
-                        'name'          => $method->name,
-                        'declaration'   => $methodTypeString.'function '.$method->name
-                    );
+                    // outcomeds handled below
+                    debug('could not create class '.$classPath);
                 }
 
-                //  start buffer
-                ob_start();
+                if(is_object($reflection))
+                {
+                    //  get methods
+                    $methods['all']         = $reflection->getMethods();
+                    $methods['abstract']    = $reflection->getMethods(\ReflectionMethod::IS_ABSTRACT);
+                    $methods['final']       = $reflection->getMethods(\ReflectionMethod::IS_FINAL);
+                    $methods['public']      = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+                    $methods['private']     = $reflection->getMethods(\ReflectionMethod::IS_PRIVATE);
+                    $methods['protected']   = $reflection->getMethods(\ReflectionMethod::IS_PROTECTED);
+                    $methods['static']      = $reflection->getMethods(\ReflectionMethod::IS_STATIC);
 
-                //  run php template
-                require(HOST_ROOT.'/php/objects/Extender/object.template.php');
+                    foreach($methods['all'] AS $method)
+                    {
+                        //  build method type string
+                        $methodTypeString   = '';
+                        $methodTypeString  .= in_array($method, $methods['abstract'])    ? 'abstract '   : '';
+                        $methodTypeString  .= in_array($method, $methods['final'])       ? 'final '      : '';
+                        $methodTypeString  .= in_array($method, $methods['public'])      ? 'public '     : '';
+                        $methodTypeString  .= in_array($method, $methods['private'])     ? 'private '    : '';
+                        $methodTypeString  .= in_array($method, $methods['protected'])   ? 'protected '  : '';
+                        $methodTypeString  .= in_array($method, $methods['static'])      ? 'static '     : '';
 
-                //  get content and end buffer
-                $extendedFileContent = ob_get_clean();
+                        //  store method info
+                        $methodInfoArray[]  = array(
+                            'name'          => $method->name,
+                            'declaration'   => $methodTypeString.'function '.$method->name
+                        );
+                    }
 
-                //  write destination 
-                file_put_contents($projectPath.$projectFile, $extendedFileContent);
+                    debug($methodInfoArray);
+
+                    //  start buffer
+                    ob_start();
+
+                    //  run php template
+                    require(HOST_ROOT.'/php/objects/Extender/object.template.php');
+
+                    //  get content and end buffer
+                    $extendedFileContent = ob_get_clean();
+
+                    //  write destination 
+                    file_put_contents($projectPath.$projectFile, $extendedFileContent);
+                }
             }
         }
         else
