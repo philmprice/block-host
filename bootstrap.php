@@ -29,28 +29,27 @@ define('HOST_BLOCK',        'block-host');
 
 ////////////////////////////
 //  LOADER SETUP
+$blockAuthor    = 'philmprice';
+$blockFolder    = 'block-host';
 $loaderDirArray = array(
-    '../controllers/',
-    '../models/',
-    '../php/objects/'
+    '../models/'
 );
-$loaderNamespaceArray = array();
+$loaderNamespaceArray = array(
+    'Host'              => '../php/objects/'
+);
+$loaderClassArray = array(
+    'Host\Controller\BaseControllerCore'       => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseControllerCore.php',
+    'Host\Controller\BaseController'           => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/BaseController.php',
+    
+    'Host\Controller\IndexControllerCore'      => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/IndexControllerCore.php',
+    'Host\Controller\IndexController'          => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/IndexController.php',
+    
+    'Host\Controller\ExtenderControllerCore'   => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderControllerCore.php',
+    'Host\Controller\ExtenderController'       => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php'
+);
 
 $loader = new \Phalcon\Loader();
-$loader->registerDirs($loaderDirArray)->register();
-
-
-////////////////////////////
-//  SYNC PROJECT FOLDER
-if(SERVER == 'dev')
-{
-    Extender::SyncProjectFolder();
-}
-
-
-////////////////////////////
-//  VIEW SETUP
-$viewDirArray = array();
+$loader->registerDirs($loaderDirArray)->registerNamespaces($loaderNamespaceArray)->register();
 
 
 ////////////////////////////
@@ -63,35 +62,8 @@ $di->set('router',      $router     = new \Phalcon\Mvc\Router());
 
 
 ////////////////////////////
-//  ROOT
-$di->set('url', function(){
-    $url = new \Phalcon\Mvc\Url();
-    $url->setBaseUri('/');
-    return $url;
-});
-
-
-////////////////////////////
-//  ROUTER
-$router->add("/extender", 
-    array(
-        'controller'    => 'extender',
-        'action'        => 'index',
-        'path'          => $_GET['path']
-    )
-);
-$router->add("/extender/extend", 
-    array(
-        'controller'    => 'extender',
-        'action'        => 'index',
-        'path'          => $_GET['path']
-    )
-);
-
-
-////////////////////////////
 //  BOOTSTRAP other blocks
-$blockFolderArray = AppBlock::getBlockFolderArray();
+$blockFolderArray = Host\AppBlockCore::getBlockFolderArray();
 foreach($blockFolderArray AS $blockFolder)
 {
     //  IF block folder's bootstrap file exists
@@ -110,6 +82,55 @@ $loader->registerDirs(      $loaderDirArray);
 $loader->registerClasses(   $loaderClassArray);
 $loader->registerNamespaces($loaderNamespaceArray);
 $loader->register();
+
+
+////////////////////////////
+//  SYNC PROJECT FOLDER
+if(SERVER == 'dev')
+{
+    Host\ExtenderCore::SyncProjectFolder();
+}
+
+
+////////////////////////////
+//  VIEW SETUP
+$viewDirArray = array();
+
+
+////////////////////////////
+//  ROOT
+$di->set('url', function(){
+    $url = new \Phalcon\Mvc\Url();
+    $url->setBaseUri('/');
+    return $url;
+});
+
+
+////////////////////////////
+//  ROUTER
+$router->setDefaults( 
+    array(
+        'controller'    => 'index',
+        'action'        => 'index',
+        'namespace'     => 'Host\Controller'
+    )
+);
+$router->add("/extender", 
+    array(
+        'controller'    => 'extender',
+        'action'        => 'index',
+        'path'          => $_GET['path'],
+        'namespace'     => 'Host'
+    )
+);
+$router->add("/extender/extend", 
+    array(
+        'controller'    => 'extender',
+        'action'        => 'index',
+        'path'          => $_GET['path'],
+        'namespace'     => 'Host'
+    )
+);
 
 
 ////////////////////////////
