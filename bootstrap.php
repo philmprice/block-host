@@ -35,7 +35,7 @@ $loaderDirArray = array(
     '../models/'
 );
 $loaderNamespaceArray = array(
-    'Host'              => '../php/objects/'
+    'Host\Object' => '../php/objects/'
 );
 $loaderClassArray = array(
     'Host\Controller\BaseControllerCore'       => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseControllerCore.php',
@@ -63,7 +63,7 @@ $di->set('router',      $router     = new \Phalcon\Mvc\Router());
 
 ////////////////////////////
 //  BOOTSTRAP other blocks
-$blockFolderArray = Host\AppBlockCore::getBlockFolderArray();
+$blockFolderArray = Host\Object\AppBlockCore::getBlockFolderArray();
 foreach($blockFolderArray AS $blockFolder)
 {
     //  IF block folder's bootstrap file exists
@@ -88,7 +88,7 @@ $loader->register();
 //  SYNC PROJECT FOLDER
 if(SERVER == 'dev')
 {
-    Host\ExtenderCore::SyncProjectFolder();
+    Host\Object\ExtenderCore::SyncProjectFolder();
 }
 
 
@@ -152,6 +152,10 @@ $di['twigService'] = function($view, $di) {
     $twig = new View($view, $di);
     return $twig;
 };
+
+$di->set('testService', function() {
+    return 'test service output';
+});
 
 $di->set('twigService', function($view, $di) use ($config) {
 

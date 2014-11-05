@@ -11,3 +11,16 @@ function debug($var)
 		echo('<p>'.$var.'</p>');
 	}
 }
+
+function thisIsWindows()
+{
+	//	init
+	$thisIsWindows = false;
+
+	if (strncasecmp(PHP_OS, 'WIN', 3) == 0) 
+	{
+    	$thisIsWindows = true;
+	} 
+
+	return $thisIsWindows;
+}

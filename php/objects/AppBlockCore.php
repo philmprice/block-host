@@ -1,6 +1,6 @@
 <?php
 
-namespace Host;
+namespace Host\Object;
 
 /**
  *  This is the Application block. Load this thing up with as much functionality 

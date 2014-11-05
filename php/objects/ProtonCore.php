@@ -1,6 +1,6 @@
 <?php
 
-namespace Host;
+namespace Host\Object;
 
 //	PROTON: a stateful object starter class
 class ProtonCore

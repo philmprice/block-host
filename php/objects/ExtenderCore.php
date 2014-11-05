@@ -1,6 +1,6 @@
 <?php
 
-namespace Host;
+namespace Host\Object;
 
 class ExtenderCore
 {
@@ -136,23 +136,27 @@ class ExtenderCore
             $projectPath        = str_replace('__core__', 'project', $corePath);
             $vendorRoot         = ABS_ROOT.'project/'.HOST_VENDOR.'/';
             $blockName          = str_replace(array($vendorRoot, 'views/'), '', $projectPath);
-            FileCore::ensurePath($projectPath);
 
             //  set template vars
             $projectFile        = str_replace('.core', '', $file);
             $coreTwig           = $blockName.'core/'.$projectFile;
 
-            //  start buffer
-            ob_start();
+            //  if project file doesn't exist, create it
+            if(!file_exists($projectPath.$projectFile))
+            {
+                FileCore::ensurePath($projectPath);
+                //  start buffer
+                ob_start();
 
-            //  run php template
-            require(HOST_ROOT.'/php/objects/Extender/twig.template.php');
+                //  run php template
+                require(HOST_ROOT.'/php/objects/Extender/twig.template.php');
 
-            //  get content and end buffer
-            $extendedFileContent = ob_get_clean();
+                //  get content and end buffer
+                $extendedFileContent = ob_get_clean();
 
-            //  write destination 
-            file_put_contents($projectPath.$projectFile, $extendedFileContent);
+                //  write destination 
+                file_put_contents($projectPath.$projectFile, $extendedFileContent);
+            }
         }
         else
         {
@@ -247,8 +251,6 @@ class ExtenderCore
                             'declaration'   => $methodTypeString.'function '.$method->name
                         );
                     }
-
-                    debug($methodInfoArray);
 
                     //  start buffer
                     ob_start();

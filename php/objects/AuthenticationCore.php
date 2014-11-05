@@ -1,6 +1,6 @@
 <?php
 
-namespace Host;
+namespace Host\Object;
 
 class AuthenticationCore extends ProtonCore
 {

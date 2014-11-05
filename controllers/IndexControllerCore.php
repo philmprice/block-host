@@ -6,6 +6,8 @@ class IndexControllerCore extends \Host\Controller\BaseControllerCore
 {
     public function indexAction()
     {
+    	$this->view->template = 'index.core.twig';
+
 		//	send debug vars to view
 		$this->debugToView();
 
