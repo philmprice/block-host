@@ -1,13 +1,13 @@
-block-module-pages
+{% extends 'core/block-module-users/index.core.twig' %}
 
 {% block header %}
-	<p>header</p>
+	{{ parent() }}
 {% endblock %}
 
 {% block content %}
-	<p>content</p>
+	{{ parent() }}
 {% endblock %}
 
 {% block footer %}
-	<p>footer</p>
+	{{ parent() }}
 {% endblock %}

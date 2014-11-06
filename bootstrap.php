@@ -134,6 +134,18 @@ $router->add("/extender/extend",
 
 
 ////////////////////////////
+//  BIND DATABASE
+$di->set('db', function(){
+    return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+        "host"      => "localhost",
+        "username"  => "root",
+        "password"  => "",
+        "dbname"    => "blocks-dev"
+    ));
+});
+
+
+////////////////////////////
 //  BIND VIEW
 Twig_Autoloader::register();
 
@@ -152,10 +164,6 @@ $di['twigService'] = function($view, $di) {
     $twig = new View($view, $di);
     return $twig;
 };
-
-$di->set('testService', function() {
-    return 'test service output';
-});
 
 $di->set('twigService', function($view, $di) use ($config) {
 
