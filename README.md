@@ -12,5 +12,6 @@ In this way, all Blocks (even the host):
 - Are extendable
 - Bring their dependencies along
 - May be upgraded by replacing core
+- Arrange extended project assets in a mirrored folder structure that can be independantely code-controlled
 
 It is currently in development, more info to come as things progress.
