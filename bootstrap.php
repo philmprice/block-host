@@ -19,9 +19,9 @@ define('SERVER', 'dev');
 
 ////////////////////////////
 //  DEFINITIONS
-define('ABS_TO_HOST_PATH',  '__core__\philmprice\block-host');
-define('HOST_ROOT',         realpath(dirname(__FILE__)));
-define('PROJ_HOST_ROOT',    str_replace('__core__', 'project', HOST_ROOT));
+define('ABS_TO_HOST_PATH',  '__core__/philmprice/block-host');
+define('HOST_ROOT',         str_replace('\\', '/', realpath(dirname(__FILE__))));
+define('PROJ_HOST_ROOT',    str_replace('\\', '/', str_replace('__core__', 'project', HOST_ROOT)));
 define('ABS_ROOT',          str_replace(ABS_TO_HOST_PATH,'',HOST_ROOT));
 define('HOST_VENDOR',       'philmprice');
 define('HOST_BLOCK',        'block-host');

@@ -26,22 +26,49 @@ class ExtenderCore
                 //  if vendor sub folder is a block
                 if(strpos($vendorSubFolder, 'block-') === 0)
                 {
-                    $blockFolderArray[] = $vendorFolder.'/'.$vendorSubFolder;
+                    $blockFolderArray[] = array('path'      => $vendorFolder.'\\'.$vendorSubFolder,
+                                                'vendor'    => $vendorFolder,
+                                                'block'     => $vendorSubFolder);
                 }
             }
         }
 
         // process block folder array
-        foreach($blockFolderArray AS $blockFolder)
+        foreach($blockFolderArray AS $blockFolderInfo)
         {
             //  extend this block folder
-            self::extend($blockFolder);
+            self::extend($blockFolderInfo['path']);
 
-            //  ensure symbolic links are in place
-                //  views
-                //  controllers
-                //  objects
-                //  models
+            //  if the link needs created
+            if(!is_link('..\\views\\'.$blockFolderInfo['block']))
+            {
+                //  if windows
+                if(thisIsWindows())
+                {
+                    //  project views link
+                    $makeProjectLink    = 'mklink /j "..\\views\\'      .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\views\\"';
+                    shell_exec($makeProjectLink);
+
+                    //  core views link
+                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'.$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\views\\"';
+                    shell_exec($makeCoreLink);
+                }
+                //  if linux
+                else
+                {
+                    //  project views link
+                    $makeProjectLink    = '';
+                    shell_exec($makeProjectLink);
+
+                    //  core views link
+                    $makeCoreLink       = '';
+                    shell_exec($makeCoreLink);
+                }
+            }
+
+            //  controllers
+            //  objects
+            //  models
         }
     }
 
@@ -54,7 +81,10 @@ class ExtenderCore
         if(is_dir($coreRoot.$vendorPath))
         {
             //  GET subfolders you need to hold extended files
-            $absFolderArray     = FileCore::getAllFolderPathsAt($coreRoot.$vendorPath);
+            $absFolderArray     = FileCore::getAllFolderPathsAt($coreRoot.$vendorPath, array(
+                'block-host/views/block-host',
+                'block-host/views/core'
+            ));
 
             //  ADD this folder to array
             $absFolderArray[]   = $coreRoot.$vendorPath;
@@ -82,10 +112,10 @@ class ExtenderCore
                 //  IF model file
                 if((strpos($parentFolder, '/models/') !== false) && ($extension == 'php') && $file == ucfirst($file))
                 {
-                    self::extendModelFile($parentFolder, $file);
+                    self::extendObjectFile($parentFolder, $file);
                 }
                 //  IF twig view file
-                elseif((strpos($parentFolder, '/views/') !== false) && ($extension == 'twig') && $file == ucfirst($file))
+                elseif((strpos($parentFolder, '/views/') !== false) && ($extension == 'twig'))
                 {
                     self::extendTwigViewFile($parentFolder, $file);
                 }
@@ -108,38 +138,17 @@ class ExtenderCore
         }
     }
 
-    public static function extendModelFile($corePath, $file)
-    {
-        /*
-        //  if file exists
-        if(file_exists($corePath.$file))
-        {
-            $fileContent    = file_get_contents($corePath.$file);
-            $projectPath    = str_replace('__core__', 'project', $corePath);
-
-            File::ensurePath($projectPath);
-            file_put_contents($projectPath.$file, $fileContent);
-        }
-        else
-        {
-            throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
-        }
-        */
-    }
-
     public static function extendTwigViewFile($corePath, $file)
     {
         //  if file exists
         if(file_exists($corePath.$file))
         {
-            //  ensure destination path
-            $projectPath        = str_replace('__core__', 'project', $corePath);
-            $vendorRoot         = ABS_ROOT.'project/'.HOST_VENDOR.'/';
-            $blockName          = str_replace(array($vendorRoot, 'views/'), '', $projectPath);
-
             //  set template vars
+            $corePath           = str_replace('\\', '/', $corePath);
+            $blockVendor        = explode('/',str_replace(ABS_ROOT.'__core__/',                  '', $corePath))[0];
+            $blockFolder        = explode('/',str_replace(ABS_ROOT.'__core__/'.$blockVendor.'/', '', $corePath))[0];
+            $projectPath        = str_replace('__core__', 'project', $corePath);
             $projectFile        = str_replace('.core', '', $file);
-            $coreTwig           = $blockName.'core/'.$projectFile;
 
             //  if project file doesn't exist, create it
             if(!file_exists($projectPath.$projectFile))
@@ -162,28 +171,6 @@ class ExtenderCore
         {
             throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
         }
-    }
-
-    public static function extendControllerFile($corePath, $file)
-    {
-        /*
-        //  if file exists
-        if(file_exists($corePath.$file))
-        {
-            //  get source content
-            $fileContent    = file_get_contents($corePath.$file);
-
-            //  destination project path to write to
-            $projectPath    = str_replace('__core__', 'project', $corePath);
-
-            //  write extended file content
-            file_put_contents($projectPath.$file, $fileContent);
-        }
-        else
-        {
-            throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
-        }
-        */
     }
 
     public static function extendObjectFile($corePath, $file)

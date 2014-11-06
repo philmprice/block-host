@@ -4,37 +4,59 @@ namespace Host\Object;
 
 class FileCore
 {
-    public static function getAllFolderPathsAt($parentFolder)
+    public static function getAllFolderPathsAt($parentFolder, $ignoreArray = null)
     {
-        //  INIT
+        //  init
         $folderArray    = array();
         $parentFolder   = rtrim($parentFolder, '/\\');
 
         if(is_dir($parentFolder))
         {
-            //  GET directory
+            //  get directory
             $d = dir($parentFolder);
             
-            //  FOR each entry
+            //  for each entry
             while (false !== ($entry = $d->read())) 
             {
-                //  IF entry is valid block folder
+                //  if entry is valid block folder
                 if($entry != '.'
                 && $entry != '..'
                 && strpos($entry, '.') !== 0
-                && is_dir($parentFolder.'/'.$entry))
+                && is_dir($parentFolder.'/'.$entry)
+                && !is_link($parentFolder.'/'.$entry))
                 {
-                    //  BUILD path
-                    $folderPath     = $parentFolder.'/'.$entry.'/';
+                    //  init
+                    $ignoreThisFolder   = false;
 
-                    //  STORE path
-                    $folderArray[]  = $folderPath;
+                    //  build path
+                    $folderPath         = $parentFolder.'/'.$entry.'/';
 
-                    //  GET sub folder paths
-                    $subFolderArray = self::getAllFolderPathsAt($folderPath);
+                    //  if ignore array provided
+                    if(is_array($ignoreArray))
+                    {
+                        //  if path contains any ignore string
+                        foreach($ignoreArray AS $ignoreString)
+                        {
+                            if(strpos($folderPath, $ignoreString) !== false)
+                            {
+                                //  ignore this folder
+                                $ignoreThisFolder =  true;
+                            }
+                        }
+                    }
 
-                    //  STORE sub folder paths
-                    $folderArray    = array_merge($folderArray, $subFolderArray);
+                    //  if we're not ignoring this folder
+                    if(!$ignoreThisFolder)
+                    {
+                        //  store path
+                        $folderArray[]  = $folderPath;
+
+                        //  get sub folder paths
+                        $subFolderArray = self::getAllFolderPathsAt($folderPath, $ignoreArray);
+
+                        //  store sub folder paths
+                        $folderArray    = array_merge($folderArray, $subFolderArray);
+                    }
                 }
             }
             
@@ -62,7 +84,8 @@ class FileCore
                 //  IF entry is valid block folder
                 if($entry != '.'
                 && $entry != '..'
-                && is_dir($parentFolder.'/'.$entry))
+                && is_dir($parentFolder.'/'.$entry)
+                && !is_link($parentFolder.'/'.$entry))
                 {
                     //  BUILD path
                     $folderPath     = $parentFolder.'/'.$entry.'/';
@@ -96,7 +119,8 @@ class FileCore
                 //  IF entry is valid block folder
                 if($entry != '.'
                 && $entry != '..'
-                && is_dir($parentFolder.'/'.$entry))
+                && is_dir($parentFolder.'/'.$entry)
+                && !is_link($parentFolder.'/'.$entry))
                 {
                     //  STORE path
                     $folderArray[]  = $entry;
