@@ -35,7 +35,8 @@ $loaderDirArray = array(
     '../models/'
 );
 $loaderNamespaceArray = array(
-    'Host\Object' => '../php/objects/'
+    'Host\Object'   => '../php/objects/',
+    'Host\Model'    => '../models/'
 );
 $loaderClassArray = array(
     'Host\Controller\BaseControllerCore'       => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseControllerCore.php',
@@ -45,7 +46,10 @@ $loaderClassArray = array(
     'Host\Controller\IndexController'          => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/IndexController.php',
     
     'Host\Controller\ExtenderControllerCore'   => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderControllerCore.php',
-    'Host\Controller\ExtenderController'       => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php'
+    'Host\Controller\ExtenderController'       => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php',
+    
+    'Model\NounCore'                           => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/models/NounCore.php',
+    'Model\Noun'                               => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/models/Noun.php'
 );
 
 $loader = new \Phalcon\Loader();
@@ -241,3 +245,25 @@ $di->set('view', function (){
 
     return $view;
 });
+
+//////////////////
+//  MODELS
+$di->setShared('modelsManager', function() {
+
+    $eventsManager = new \Phalcon\Events\Manager();
+
+    //Attach an anonymous function as a listener for "model" events
+    $eventsManager->attach('model', function($event, $model){
+
+        //  listeners go here
+        
+        return true;
+    });
+
+    //Setting a default EventsManager
+    $modelsManager = new Phalcon\Mvc\Model\Manager();
+    $modelsManager->setEventsManager($eventsManager);
+    return $modelsManager;
+});
+
+$di->setShared('modelsMetadata', new Phalcon\Mvc\Model\Metadata\Memory());

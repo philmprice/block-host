@@ -5,7 +5,12 @@ block-module-users
 {% endblock %}
 
 {% block content %}
-	<p>content</p>
+	<p>
+		User array:<br>
+		{% for user in userArray %}
+			{{ user.firstName }} {{ user.lastName }}<br>
+		{% endfor %}
+	</p>
 {% endblock %}
 
 {% block footer %}
