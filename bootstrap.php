@@ -19,9 +19,12 @@ define('SERVER', 'dev');
 
 ////////////////////////////
 //  DEFINITIONS
-define('ABS_TO_HOST_PATH',  '__core__/philmprice/block-host');
+define('ROOT',              '/block-box/');
+define('CORE_FOLDER',       'vendor');
+define('PROJ_FOLDER',       'local');
+define('ABS_TO_HOST_PATH',  CORE_FOLDER.'/philmprice/block-host');
 define('HOST_ROOT',         str_replace('\\', '/', realpath(dirname(__FILE__))));
-define('PROJ_HOST_ROOT',    str_replace('\\', '/', str_replace('__core__', 'project', HOST_ROOT)));
+define('PROJ_HOST_ROOT',    str_replace('\\', '/', str_replace(CORE_FOLDER, PROJ_FOLDER, HOST_ROOT)));
 define('ABS_ROOT',          str_replace(ABS_TO_HOST_PATH,'',HOST_ROOT));
 define('HOST_VENDOR',       'philmprice');
 define('HOST_BLOCK',        'block-host');
@@ -39,17 +42,17 @@ $loaderNamespaceArray = array(
     'Host\Model'    => '../models/'
 );
 $loaderClassArray = array(
-    'Host\Controller\BaseControllerCore'       => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseControllerCore.php',
-    'Host\Controller\BaseController'           => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/BaseController.php',
+    'Host\Controller\BaseControllerCore'       => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseControllerCore.php',
+    'Host\Controller\BaseController'           => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/BaseController.php',
     
-    'Host\Controller\IndexControllerCore'      => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/IndexControllerCore.php',
-    'Host\Controller\IndexController'          => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/IndexController.php',
+    'Host\Controller\IndexControllerCore'      => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/IndexControllerCore.php',
+    'Host\Controller\IndexController'          => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/IndexController.php',
     
-    'Host\Controller\ExtenderControllerCore'   => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderControllerCore.php',
-    'Host\Controller\ExtenderController'       => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php',
+    'Host\Controller\ExtenderControllerCore'   => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderControllerCore.php',
+    'Host\Controller\ExtenderController'       => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php',
     
-    'Model\NounCore'                           => ABS_ROOT.'__core__/'.$blockAuthor.'/'.$blockFolder.'/models/NounCore.php',
-    'Model\Noun'                               => ABS_ROOT.'project/' .$blockAuthor.'/'.$blockFolder.'/models/Noun.php'
+    'Model\NounCore'                           => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/NounCore.php',
+    'Model\Noun'                               => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/Noun.php'
 );
 
 $loader = new \Phalcon\Loader();
@@ -95,21 +98,6 @@ $loader->register();
 if(SERVER == 'dev')
 {
     Host\Object\ExtenderCore::SyncProjectFolder();
-
-    //  gather up and minify CSS
-    /*
-    $assetManager   = new \Phalcon\Assets\Manager();
-    $assetManager
-        ->collection('headerCss')
-        ->addCss('../css/style.css')
-        ->setTargetPath('css/minified.css')
-        ->setTargetUri('css/minified.css')
-        ->join(true);
-
-    $assetManager->outputCss('headerCss');
-    */
-
-    //  gather up and minify JS
 }
 
 
@@ -207,14 +195,6 @@ $di->set('view', function (){
 
     $view->registerEngines(array(
         '.twig' => 'twigService'
-
-        /*
-        ,".volt" => function($view, $di) {
-            $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
-            $volt->setOptions(array('compileAlways' => true));
-            return $volt;
-        }
-        */
     ));
 
     return $view;

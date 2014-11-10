@@ -1,13 +1,19 @@
-block-module-pages
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ root }}css/core/block-plugin-twitter-bootstrap/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="{{ root }}css/core/block-plugin-twitter-bootstrap/bootstrap-responsive-min.css" type="text/css" />
+	</head>
+	<body>
+		{% block header %}
+			<p>header</p>
+		{% endblock %}
 
-{% block header %}
-	<p>header</p>
-{% endblock %}
+		{% block content %}
+			<p>block-module-pages</p>
+		{% endblock %}
 
-{% block content %}
-	<p>content</p>
-{% endblock %}
-
-{% block footer %}
-	<p>footer</p>
-{% endblock %}
+		{% block footer %}
+			<p>footer</p>
+		{% endblock %}
+	</body>
+</html>

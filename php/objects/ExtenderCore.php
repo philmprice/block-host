@@ -12,13 +12,13 @@ class ExtenderCore
         $blockFolderArray   = array();
 
         //  get vendor folder array
-        $vendorFolderArray  = FileCore::getFoldersAt(ABS_ROOT.'__core__');
+        $vendorFolderArray  = FileCore::getFoldersAt(ABS_ROOT.CORE_FOLDER);
 
         //  process vendor folders
         foreach($vendorFolderArray AS $vendorFolder)
         {
             //  get vendor sub folder array
-            $vendorSubFolderArray   = FileCore::getFoldersAt(ABS_ROOT.'__core__/'.$vendorFolder);
+            $vendorSubFolderArray   = FileCore::getFoldersAt(ABS_ROOT.CORE_FOLDER.'/'.$vendorFolder);
 
             //  process vendor sub folder array
             foreach($vendorSubFolderArray AS $vendorSubFolder)
@@ -46,19 +46,19 @@ class ExtenderCore
                 if(thisIsWindows())
                 {
                     //  project views link
-                    $makeProjectLink    = 'mklink /j "..\\views\\'          .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\views\\"';
+                    $makeProjectLink    = 'mklink /j "..\\views\\'          .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
                     shell_exec($makeProjectLink);
 
                     //  core views link
-                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'    .$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\views\\"';
+                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'    .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
                     shell_exec($makeCoreLink);
 
                     //  project css link
-                    $makeProjectLink    = 'mklink /j "..\\www\\css\\'       .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\css\\"';
+                    $makeProjectLink    = 'mklink /j "..\\www\\css\\'       .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
                     shell_exec($makeProjectLink);
 
                     //  core css link
-                    $makeCoreLink       = 'mklink /j "..\\www\\css\\core\\' .$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\css\\"';
+                    $makeCoreLink       = 'mklink /j "..\\www\\css\\core\\' .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
                     shell_exec($makeCoreLink);
                 }
                 //  if linux
@@ -79,7 +79,7 @@ class ExtenderCore
     public static function extend($vendorPath)
     {
         //  core root
-        $coreRoot   = ABS_ROOT.'__core__/';
+        $coreRoot   = ABS_ROOT.CORE_FOLDER.'/';
 
         //  if folder exists
         if(is_dir($coreRoot.$vendorPath))
@@ -149,9 +149,9 @@ class ExtenderCore
         {
             //  set template vars
             $corePath           = str_replace('\\', '/', $corePath);
-            $blockVendor        = explode('/',str_replace(ABS_ROOT.'__core__/',                  '', $corePath))[0];
-            $blockFolder        = explode('/',str_replace(ABS_ROOT.'__core__/'.$blockVendor.'/', '', $corePath))[0];
-            $projectPath        = str_replace('__core__', 'project', $corePath);
+            $blockVendor        = explode('/',str_replace(ABS_ROOT.CORE_FOLDER.'/',                  '', $corePath))[0];
+            $blockFolder        = explode('/',str_replace(ABS_ROOT.CORE_FOLDER.'/'.$blockVendor.'/', '', $corePath))[0];
+            $projectPath        = str_replace(CORE_FOLDER, PROJ_FOLDER, $corePath);
             $projectFile        = str_replace('.core', '', $file);
 
             //  if project file doesn't exist, create it
@@ -183,7 +183,7 @@ class ExtenderCore
         if(file_exists($corePath.$file))
         {
             //  ensure destination path
-            $projectPath        = str_replace('__core__', 'project', $corePath);
+            $projectPath        = str_replace(CORE_FOLDER, PROJ_FOLDER, $corePath);
             FileCore::ensurePath($projectPath);
 
             //  set template vars
@@ -268,7 +268,7 @@ class ExtenderCore
     public static function projectFileExists($vendorPath)
     {
         //  BUILD absolute path
-        $absPath    = ABS_ROOT.'__core__/'.$vendorPath;
+        $absPath    = ABS_ROOT.CORE_FOLDER.'/'.$vendorPath;
 
         return file_exists($absPath);
     }
