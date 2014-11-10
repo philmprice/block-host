@@ -8,5 +8,7 @@ class IndexControllerCore extends \Host\Controller\BaseControllerCore
     {
 		//	set main view
 		$this->view->setMainView('block-host/index');
+
+		$this->assets->addCss('css/minified.css');
     }
 }

@@ -63,6 +63,8 @@ $di->set('dispatcher',  $dispatcher = new \Phalcon\Mvc\Dispatcher());
 $di->set('response',    $response   = new \Phalcon\Http\Response());
 $di->set('request',     $request    = new \Phalcon\Http\Request());
 $di->set('router',      $router     = new \Phalcon\Mvc\Router());
+$di->set('assets',      $assets     = new \Phalcon\Assets\Manager());
+$di->set('escaper',     $escaper    = new \Phalcon\Escaper());
 
 
 ////////////////////////////
@@ -93,6 +95,21 @@ $loader->register();
 if(SERVER == 'dev')
 {
     Host\Object\ExtenderCore::SyncProjectFolder();
+
+    //  gather up and minify CSS
+    /*
+    $assetManager   = new \Phalcon\Assets\Manager();
+    $assetManager
+        ->collection('headerCss')
+        ->addCss('../css/style.css')
+        ->setTargetPath('css/minified.css')
+        ->setTargetUri('css/minified.css')
+        ->join(true);
+
+    $assetManager->outputCss('headerCss');
+    */
+
+    //  gather up and minify JS
 }
 
 
@@ -175,49 +192,6 @@ $di->set('twigService', function($view, $di) use ($config) {
     $option     = array('cache' => '../cache/');
     $arrFolder  = array('../views/');
     $twig       = new \Phalcon\Mvc\View\Engine\Twig($view, $di, $options, $arrFolder);
-
-    /*
-    //  create twig function 'inc' and register it
-    $function   = new Twig_SimpleFunction('inc', function(Twig_Environment $env, $context, $template, $variables = array(), $withContext = true, $ignoreMissing = false, $sandboxed = false) {
-        
-        //  GET json filename
-        $jsonFilename           = str_replace('.twig', '.json', $template);
-        
-        //  IF json default data exists
-        if(file_exists(ABS_ROOT.'views/'.$jsonFilename))
-        {
-            //  GET data
-            $arrData            = json_decode(file_get_contents(ABS_ROOT.'views/'.$jsonFilename), true);
-            
-            //  MERGE data into context
-            foreach($arrData AS $key => $data)
-            {
-                if(!array_key_exists($key, $context))
-                {
-                    $context[$key]  = $data;
-                }
-            }
-        }
-
-        //  GET paths for project verion of twig view
-        $templateFilePath = HOST_ROOT.'/views/project/'.$template;
-        $templateTwigPath = 'project/'.$template;
-
-        // if project version of twig view exists
-        if(file_exists($templateFilePath))
-        {
-            //  use it instead
-            $template = $templateTwigPath;
-        }
-
-        //  INCLUDE and display template
-        echo twig_include($env, $context, $template, $variables, $withContext, $ignoreMissing, $sandboxed);
-
-    }, array('needs_environment' => true, 'needs_context' => true));
-
-    //  register the function we just created
-    $twig->getTwig()->addFunction($function);
-    */
 
     return $twig;
 

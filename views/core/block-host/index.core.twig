@@ -1,13 +1,12 @@
-block-host
-
-{% block header %}
-	<p>header</p>
-{% endblock %}
-
-{% block content %}
-	<p>content</p>
-{% endblock %}
-
-{% block footer %}
-	<p>footer</p>
-{% endblock %}
+<html>
+	<head>
+		<link rel="stylesheet" href="css/core/block-host/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/core/block-plugin-twitter-bootstrap/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="css/core/block-plugin-twitter-bootstrap/bootstrap-responsive-min.css" type="text/css" />
+	</head>
+	<body>
+		{% block body %}
+			<p>content</p>
+		{% endblock %}
+	</body>
+</html>

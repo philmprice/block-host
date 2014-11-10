@@ -46,11 +46,19 @@ class ExtenderCore
                 if(thisIsWindows())
                 {
                     //  project views link
-                    $makeProjectLink    = 'mklink /j "..\\views\\'      .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\views\\"';
+                    $makeProjectLink    = 'mklink /j "..\\views\\'          .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\views\\"';
                     shell_exec($makeProjectLink);
 
                     //  core views link
-                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'.$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\views\\"';
+                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'    .$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\views\\"';
+                    shell_exec($makeCoreLink);
+
+                    //  project css link
+                    $makeProjectLink    = 'mklink /j "..\\www\\css\\'       .$blockFolderInfo['block'].'" "..\\..\\..\\..\\project\\' .$blockFolderInfo['path'].'\\css\\"';
+                    shell_exec($makeProjectLink);
+
+                    //  core css link
+                    $makeCoreLink       = 'mklink /j "..\\www\\css\\core\\' .$blockFolderInfo['block'].'" "..\\..\\..\\..\\__core__\\'.$blockFolderInfo['path'].'\\css\\"';
                     shell_exec($makeCoreLink);
                 }
                 //  if linux
@@ -65,10 +73,6 @@ class ExtenderCore
                     shell_exec($makeCoreLink);
                 }
             }
-
-            //  controllers
-            //  objects
-            //  models
         }
     }
 
@@ -201,14 +205,16 @@ class ExtenderCore
                     }
                     else
                     {
-                        debug('class does not exist: '.$classPath);
+                        debug('ExtenderCore.php says: Unable to load class, so cannot extend: '.$classPath);
                     }
                 }
                 catch(Exception $e)
                 {
                     // outcomeds handled below
-                    debug('could not create class '.$classPath);
+                    debug('ExtenderCore.php says: Could not create class '.$classPath);
                 }
+
+                // debug('namespace: '.$namespace);
 
                 if(is_object($reflection))
                 {

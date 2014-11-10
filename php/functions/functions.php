@@ -24,3 +24,12 @@ function thisIsWindows()
 
 	return $thisIsWindows;
 }
+
+function handle2upperHandle($in)
+{
+	//	convert _ or - to space
+	//	upper case the words
+	//	remove the spaces
+	//	ie. my-awesome-handle becomes MyAwesomeHandle
+	return str_replace(' ','',ucwords(str_replace(array('_','-'),' ',$in)));
+}

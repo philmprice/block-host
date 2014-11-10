@@ -1,7 +1,7 @@
 {
     "name": "philmprice/phalcon-blocks",
     "description": "Host for 'Blocks' Platform",
-    "homepage": "http://github.com/philmprice/phalcon-blocks",
+    "homepage": "http://github.com/philmprice/block-host",
     "license": "MIT",
     "version": "0.1",
     "authors": [
@@ -9,7 +9,7 @@
             "name": "Phil Price",
             "email": "philmprice@gmail.com",
             "homepage": "http://github.com/philmprice",
-            "role": "Developer"
+            "role": "Author"
         }
     ],
     "require": {
