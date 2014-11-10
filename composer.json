@@ -13,7 +13,9 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "philmprice/block-module-pages": "0.1.*",
+        "philmprice/block-module-users": "0.1.*"
     },
     "autoload": {
         "psr-0": {
