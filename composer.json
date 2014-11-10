@@ -15,8 +15,8 @@
     "minimum-stability" : "dev",
     "require-dev": {
         "php": ">=5.3.0",
-        "philmprice/block-module-pages": "*",
-        "philmprice/block-module-users": "*"
+        "philmprice/block-module-pages": "dev-master",
+        "philmprice/block-module-users": "dev-master"
     },
     "autoload": {
         "psr-0": {
