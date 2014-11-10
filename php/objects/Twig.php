@@ -28,6 +28,11 @@ class Twig extends Engine implements EngineInterface
         $arrFolder[]    = $view->getViewsDir();
         $loader         = new \Twig_Loader_Filesystem($arrFolder);
 
+        if(!is_array($options))
+        {
+            $options = array();
+        }
+
         $this->twig = new Twig\Environment($di, $loader, $options);
         $this->twig->addExtension(new Twig\CoreExtension());
         $this->registryFunctions($view, $di);
