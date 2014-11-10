@@ -13,10 +13,10 @@
         }
     ],
     "minimum-stability" : "dev",
-    "require": {
+    "require-dev": {
         "php": ">=5.3.0",
-        "philmprice/block-module-pages": "dev-master",
-        "philmprice/block-module-users": "dev-master"
+        "philmprice/block-module-pages": "*",
+        "philmprice/block-module-users": "*"
     },
     "autoload": {
         "psr-0": {
