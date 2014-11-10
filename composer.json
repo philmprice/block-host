@@ -15,6 +15,7 @@
     "minimum-stability" : "dev",
     "require-dev": {
         "php": ">=5.3.0",
+        "composer/installers": "~1.0",
         "philmprice/block-module-pages": "*",
         "philmprice/block-module-users": "*"
     },
