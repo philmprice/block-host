@@ -19,9 +19,9 @@ define('SERVER', 'dev');
 
 ////////////////////////////
 //  DEFINITIONS
-define('ROOT',              '/block-box/');
 define('CORE_FOLDER',       'vendor');
 define('PROJ_FOLDER',       'local');
+define('ROOT',              getRootFromServerGlobal($_SERVER));
 define('ABS_TO_HOST_PATH',  CORE_FOLDER.'/philmprice/block-host');
 define('HOST_ROOT',         str_replace('\\', '/', realpath(dirname(__FILE__))));
 define('PROJ_HOST_ROOT',    str_replace('\\', '/', str_replace(CORE_FOLDER, PROJ_FOLDER, HOST_ROOT)));

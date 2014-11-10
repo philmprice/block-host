@@ -33,3 +33,35 @@ function handle2upperHandle($in)
 	//	ie. my-awesome-handle becomes MyAwesomeHandle
 	return str_replace(' ','',ucwords(str_replace(array('_','-'),' ',$in)));
 }
+
+function getRootFromServerGlobal($serverGlobalArray)
+{
+	//	init
+	$rootPath 			= '/';
+	$rootPathArray		= array();
+	$scriptPathArray	= explode('/', $serverGlobalArray['SCRIPT_NAME']);
+
+	//	process path parts
+	foreach($scriptPathArray AS $scriptPathPart)
+	{
+		//	if part is core folder, break out of loop
+		if($scriptPathPart == CORE_FOLDER)	
+		{
+			break;
+		}
+		//	else store path part
+		elseif(strlen(trim($scriptPathPart)))
+		{
+			$rootPathArray[]	= $scriptPathPart;
+		}
+	}
+
+	//	if root path parts discovered
+	if(sizeof($rootPathArray))
+	{
+		//	set root path
+		$rootPath 	= '/'.implode('/', $rootPathArray).'/';
+	}
+
+	return $rootPath;
+}
