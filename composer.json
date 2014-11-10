@@ -14,8 +14,8 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "philmprice/block-module-pages": "0.1.*",
-        "philmprice/block-module-users": "0.1.*"
+        "philmprice/block-module-pages": "dev-master",
+        "philmprice/block-module-users": "dev-master"
     },
     "autoload": {
         "psr-0": {
