@@ -95,7 +95,7 @@ $loader->register();
 
 ////////////////////////////
 //  SYNC PROJECT FOLDER
-if(SERVER == 'dev')
+if(SERVER == 'dev' && isset($_GET['refreshAll']))
 {
     Host\Object\ExtenderCore::SyncProjectFolder();
 }
@@ -119,9 +119,9 @@ $di->set('url', function(){
 //  ROUTER
 $router->setDefaults( 
     array(
-        'controller'    => 'index',
-        'action'        => 'index',
-        'namespace'     => 'Host\Controller'
+        'controller'    => 'index',             //  what controller class do i go to?
+        'action'        => 'index',             //  what function do i run in that class?
+        'namespace'     => 'Host\Controller'    //  what namespace is the controller class in?
     )
 );
 $router->add("/extender", 
@@ -129,7 +129,7 @@ $router->add("/extender",
         'controller'    => 'extender',
         'action'        => 'index',
         'path'          => $_GET['path'],
-        'namespace'     => 'Host'
+        'namespace'     => 'Host\Controller'
     )
 );
 $router->add("/extender/extend", 
@@ -137,7 +137,7 @@ $router->add("/extender/extend",
         'controller'    => 'extender',
         'action'        => 'index',
         'path'          => $_GET['path'],
-        'namespace'     => 'Host'
+        'namespace'     => 'Host\Controller'
     )
 );
 
