@@ -5,3 +5,10 @@
 	font-family: arial;
 	color: green;
 }
+
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../../../fonts/core/block-plugin-twitter-bootstrap/glyphicons-halflings-regular.eot');
+  src: url('../../../fonts/core/block-plugin-twitter-bootstrap/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../../fonts/core/block-plugin-twitter-bootstrap/glyphicons-halflings-regular.woff') format('woff'), url('../../../fonts/core/block-plugin-twitter-bootstrap/glyphicons-halflings-regular.ttf') format('truetype'), url('../../../fonts/core/block-plugin-twitter-bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}

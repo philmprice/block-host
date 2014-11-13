@@ -46,19 +46,35 @@ class ExtenderCore
                 if(thisIsWindows())
                 {
                     //  project views link
-                    $makeProjectLink    = 'mklink /j "..\\views\\'          .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
+                    $makeProjectLink    = 'mklink /j "..\\views\\'              .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
                     shell_exec($makeProjectLink);
 
                     //  core views link
-                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'    .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
+                    $makeCoreLink       = 'mklink /j "..\\views\\core\\'        .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\views\\"';
                     shell_exec($makeCoreLink);
 
                     //  project css link
-                    $makeProjectLink    = 'mklink /j "..\\www\\css\\'       .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
+                    $makeProjectLink    = 'mklink /j "..\\www\\css\\'           .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
                     shell_exec($makeProjectLink);
 
                     //  core css link
-                    $makeCoreLink       = 'mklink /j "..\\www\\css\\core\\' .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
+                    $makeCoreLink       = 'mklink /j "..\\www\\css\\core\\'     .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\css\\"';
+                    shell_exec($makeCoreLink);
+
+                    //  project fonts link
+                    $makeProjectLink    = 'mklink /j "..\\www\\fonts\\'         .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\fonts\\"';
+                    shell_exec($makeProjectLink);
+
+                    //  core fonts link
+                    $makeCoreLink       = 'mklink /j "..\\www\\fonts\\core\\'   .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\fonts\\"';
+                    shell_exec($makeCoreLink);
+
+                    //  project js link
+                    $makeProjectLink    = 'mklink /j "..\\www\\js\\'            .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.PROJ_FOLDER.'\\'.$blockFolderInfo['path'].'\\js\\"';
+                    shell_exec($makeProjectLink);
+
+                    //  core js link
+                    $makeCoreLink       = 'mklink /j "..\\www\\js\\core\\'      .$blockFolderInfo['block'].'" "..\\..\\..\\..\\'.CORE_FOLDER.'\\'.$blockFolderInfo['path'].'\\js\\"';
                     shell_exec($makeCoreLink);
                 }
                 //  if linux

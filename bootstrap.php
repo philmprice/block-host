@@ -2,6 +2,7 @@
 
 ////////////////////////////
 //  INCLUDES
+
 require_once "../../../twig/twig/lib/Twig/Autoloader.php";  Twig_Autoloader::register();
 require_once "php/objects/Twig.php";
 require_once "php/objects/Twig/Environment.php";
@@ -10,15 +11,15 @@ require_once "php/objects/Twig/Nodes/Assets.php";
 require_once "php/objects/Twig/TokenParsers/Assets.php";
 require_once 'php/functions/functions.php';
 
-
 ////////////////////////////
 //  SERVER
+
 define('SERVER', 'dev');
 // define('SERVER', 'live');
 
-
 ////////////////////////////
 //  DEFINITIONS
+
 define('CORE_FOLDER',       'vendor');
 define('PROJ_FOLDER',       'local');
 define('ROOT',              getRootFromServerGlobal($_SERVER));
@@ -29,9 +30,9 @@ define('ABS_ROOT',          str_replace(ABS_TO_HOST_PATH,'',HOST_ROOT));
 define('HOST_VENDOR',       'philmprice');
 define('HOST_BLOCK',        'block-host');
 
-
 ////////////////////////////
 //  LOADER SETUP
+
 $blockAuthor    = 'philmprice';
 $blockFolder    = 'block-host';
 $loaderDirArray = array(
@@ -52,26 +53,38 @@ $loaderClassArray = array(
     'Host\Controller\ExtenderController'       => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/controllers/ExtenderController.php',
     
     'Model\NounCore'                           => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/NounCore.php',
-    'Model\Noun'                               => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/Noun.php'
+    'Model\Noun'                               => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/Noun.php',
+
+    'Model\ModuleCore'                         => ABS_ROOT.CORE_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/ModuleCore.php',
+    'Model\Module'                             => ABS_ROOT.PROJ_FOLDER.'/'.$blockAuthor.'/'.$blockFolder.'/models/Module.php'
+
 );
 
 $loader = new \Phalcon\Loader();
-$loader->registerDirs($loaderDirArray)->registerNamespaces($loaderNamespaceArray)->register();
-
+$loader->registerDirs($loaderDirArray)->registerNamespaces($loaderNamespaceArray)->registerClasses($loaderClassArray)->register();
 
 ////////////////////////////
 //  DEPENDENCY INJECTOR
-$di = new Phalcon\DI();
-$di->set('dispatcher',  $dispatcher = new \Phalcon\Mvc\Dispatcher());
-$di->set('response',    $response   = new \Phalcon\Http\Response());
-$di->set('request',     $request    = new \Phalcon\Http\Request());
-$di->set('router',      $router     = new \Phalcon\Mvc\Router());
-$di->set('assets',      $assets     = new \Phalcon\Assets\Manager());
-$di->set('escaper',     $escaper    = new \Phalcon\Escaper());
 
+$di = new Phalcon\DI();
+$di->set('dispatcher',      $dispatcher     = new \Phalcon\Mvc\Dispatcher());
+$di->set('response',        $response       = new \Phalcon\Http\Response());
+$di->set('request',         $request        = new \Phalcon\Http\Request());
+$di->set('router',          $router         = new \Phalcon\Mvc\Router());
+$di->set('assets',          $assets         = new \Phalcon\Assets\Manager());
+$di->set('escaper',         $escaper        = new \Phalcon\Escaper());
+$di->set('modelsManager',   $modelsManager  = new \Phalcon\Mvc\Model\Manager());
+$di->set('modelsMetadata',  $modelsMetadata = new \Phalcon\Mvc\Model\Metadata\Memory());
+$di->set('db',              $db             = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+                                                "host"      => "localhost",
+                                                "username"  => "root",
+                                                "password"  => "",
+                                                "dbname"    => "blocks-dev"
+                                            )));
 
 ////////////////////////////
 //  BOOTSTRAP other blocks
+
 $blockFolderArray = Host\Object\AppBlockCore::getBlockFolderArray();
 foreach($blockFolderArray AS $blockFolder)
 {
@@ -83,37 +96,36 @@ foreach($blockFolderArray AS $blockFolder)
     }
 }
 
-
 ////////////////////////////
 //  BIND LOADER
+
 $loader = new \Phalcon\Loader();
 $loader->registerDirs(      $loaderDirArray);
 $loader->registerClasses(   $loaderClassArray);
 $loader->registerNamespaces($loaderNamespaceArray);
 $loader->register();
 
-
 ////////////////////////////
 //  SYNC PROJECT FOLDER
+
 if(SERVER == 'dev' && isset($_GET['refreshAll']))
 {
     Host\Object\ExtenderCore::SyncProjectFolder();
 }
 
-
 ////////////////////////////
 //  VIEW SETUP
-$viewDirArray = array();
 
+$viewDirArray = array();
 
 ////////////////////////////
 //  ROOT
+
 $di->set('url', function(){
     $url = new \Phalcon\Mvc\Url();
     $url->setBaseUri('/');
     return $url;
 });
-
 
 ////////////////////////////
 //  ROUTER
@@ -141,21 +153,9 @@ $router->add("/extender/extend",
     )
 );
 
-
-////////////////////////////
-//  BIND DATABASE
-$di->set('db', function(){
-    return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        "host"      => "localhost",
-        "username"  => "root",
-        "password"  => "",
-        "dbname"    => "blocks-dev"
-    ));
-});
-
-
 ////////////////////////////
 //  BIND VIEW
+
 Twig_Autoloader::register();
 
 $di['twigService'] = function($view, $di) {
@@ -199,25 +199,3 @@ $di->set('view', function (){
 
     return $view;
 });
-
-//////////////////
-//  MODELS
-$di->setShared('modelsManager', function() {
-
-    $eventsManager = new \Phalcon\Events\Manager();
-
-    //Attach an anonymous function as a listener for "model" events
-    $eventsManager->attach('model', function($event, $model){
-
-        //  listeners go here
-        
-        return true;
-    });
-
-    //Setting a default EventsManager
-    $modelsManager = new Phalcon\Mvc\Model\Manager();
-    $modelsManager->setEventsManager($eventsManager);
-    return $modelsManager;
-});
-
-$di->setShared('modelsMetadata', new Phalcon\Mvc\Model\Metadata\Memory());
