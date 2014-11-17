@@ -6,6 +6,26 @@
 	color: green;
 }
 
+.left
+{
+	text-align: left;
+}
+
+.right
+{
+	text-align: right;
+}
+
+.center
+{
+	text-align: center;
+}
+
+.panel-heading span.glyphicon
+{
+	font-size: 28px;
+	font-weight: normal;
+}
 
 @font-face {
   font-family: 'Glyphicons Halflings';

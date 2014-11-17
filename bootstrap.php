@@ -73,6 +73,7 @@ $di->set('request',         $request        = new \Phalcon\Http\Request());
 $di->set('router',          $router         = new \Phalcon\Mvc\Router());
 $di->set('assets',          $assets         = new \Phalcon\Assets\Manager());
 $di->set('escaper',         $escaper        = new \Phalcon\Escaper());
+$di->set('filter',          $filter         = new \Phalcon\Filter());
 $di->set('modelsManager',   $modelsManager  = new \Phalcon\Mvc\Model\Manager());
 $di->set('modelsMetadata',  $modelsMetadata = new \Phalcon\Mvc\Model\Metadata\Memory());
 $di->set('db',              $db             = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
