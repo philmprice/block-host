@@ -122,39 +122,46 @@ class ExtenderCore
         //  GET files in folder
         $fileArray    = FileCore::getFilesInFolder($parentFolder);
 
+        //  for each file
         foreach($fileArray AS $file)
         {
-            //  GET extension
-            $extension  = pathinfo($parentFolder.$file, PATHINFO_EXTENSION);
+            //  extend file
+            self::extendFolderFile($parentFolder, $file);
+        }
+    }
 
-            try
+    public static function extendFolderFile($folderPath, $file)
+    {
+        //  GET extension
+        $extension  = pathinfo($folderPath.$file, PATHINFO_EXTENSION);
+
+        try
+        {
+            //  IF model file
+            if((strpos($folderPath, '/models/') !== false) && ($extension == 'php') && $file == ucfirst($file))
             {
-                //  IF model file
-                if((strpos($parentFolder, '/models/') !== false) && ($extension == 'php') && $file == ucfirst($file))
-                {
-                    self::extendObjectFile($parentFolder, $file);
-                }
-                //  IF twig view file
-                elseif((strpos($parentFolder, '/views/') !== false) && ($extension == 'twig'))
-                {
-                    self::extendTwigViewFile($parentFolder, $file);
-                }
-                //  IF controller file
-                elseif((strpos($parentFolder, '/controllers/') !== false) && ($extension == 'php') && $file == ucfirst($file))
-                {
-                    self::extendObjectFile($parentFolder, $file);
-                }
-                //  IF object file
-                elseif((strpos($parentFolder, '/objects/') !== false) && ($extension == 'php') && $file == ucfirst($file))
-                {
-                    self::extendObjectFile($parentFolder, $file);
-                }
+                self::extendObjectFile($folderPath, $file);
             }
-            catch(Exception $e)
+            //  IF twig view file
+            elseif((strpos($folderPath, '/views/') !== false) && ($extension == 'twig'))
             {
-                debug($e->getMessage());
-                exit;
+                self::extendTwigViewFile($folderPath, $file);
             }
+            //  IF controller file
+            elseif((strpos($folderPath, '/controllers/') !== false) && ($extension == 'php') && $file == ucfirst($file))
+            {
+                self::extendObjectFile($folderPath, $file);
+            }
+            //  IF object file
+            elseif((strpos($folderPath, '/objects/') !== false) && ($extension == 'php') && $file == ucfirst($file))
+            {
+                self::extendObjectFile($folderPath, $file);
+            }
+        }
+        catch(Exception $e)
+        {
+            debug($e->getMessage());
+            exit;
         }
     }
 
@@ -277,7 +284,7 @@ class ExtenderCore
         }
         else
         {
-            throw new Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
+            throw new \Exception('Caught attempt to extend a non-existant file: '.$corePath.$file);
         }
     }
 
