@@ -84,6 +84,15 @@ $di->set('db',              $db             = new \Phalcon\Db\Adapter\Pdo\Mysql(
                                             )));
 
 ////////////////////////////
+//  ENSURE LOCAL CLASSES
+
+if(SERVER == 'dev' && isset($_GET['refreshAll']))
+{
+    \Host\Object\ExtenderCore::extendFolderFile(HOST_ROOT.'/models/', 'NounCore.php');
+    \Host\Object\ExtenderCore::extendFolderFile(HOST_ROOT.'/models/', 'ModuleCore.php');
+}
+
+////////////////////////////
 //  BOOTSTRAP other blocks
 
 $blockFolderArray = Host\Object\AppBlockCore::getBlockFolderArray();
