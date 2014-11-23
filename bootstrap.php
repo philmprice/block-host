@@ -84,6 +84,13 @@ $di->set('db',              $db             = new \Phalcon\Db\Adapter\Pdo\Mysql(
                                             )));
 
 ////////////////////////////
+//  CATCH FIRST LOAD
+if(!is_dir('../../../../local'))
+{
+    $_GET['refreshAll'] = true;
+}
+
+////////////////////////////
 //  ENSURE LOCAL CLASSES
 
 if(SERVER == 'dev' && isset($_GET['refreshAll']))
