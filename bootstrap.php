@@ -70,7 +70,7 @@ $di = new Phalcon\DI();
 $di->set('dispatcher',      $dispatcher     = new \Phalcon\Mvc\Dispatcher());
 $di->set('response',        $response       = new \Phalcon\Http\Response());
 $di->set('request',         $request        = new \Phalcon\Http\Request());
-$di->set('router',          $router         = new \Phalcon\Mvc\Router());
+$di->set('router',          $router         = new \Phalcon\Mvc\Router(false));
 $di->set('assets',          $assets         = new \Phalcon\Assets\Manager());
 $di->set('escaper',         $escaper        = new \Phalcon\Escaper());
 $di->set('filter',          $filter         = new \Phalcon\Filter());
@@ -166,6 +166,13 @@ $router->add("/extender/extend",
         'controller'    => 'extender',
         'action'        => 'index',
         'path'          => $_GET['path'],
+        'namespace'     => 'Host\Controller'
+    )
+);
+$router->notFound(
+    array(
+        'controller'    => 'index',
+        'action'        => 'notFound',
         'namespace'     => 'Host\Controller'
     )
 );
