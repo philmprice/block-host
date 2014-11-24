@@ -42,6 +42,21 @@ class ExtenderCore
             //  if the link needs created
             if(!is_link('..\\views\\'.$blockFolderInfo['block']))
             {
+                //  ensure view symlink folders
+                \Host\Object\FileCore::ensurePath("../views/core");
+
+                //  ensure js symlink folders
+                \Host\Object\FileCore::ensurePath("../www/js");
+                \Host\Object\FileCore::ensurePath("../www/js/core");
+
+                //  ensure css symlink folders
+                \Host\Object\FileCore::ensurePath("../www/css");
+                \Host\Object\FileCore::ensurePath("../www/css/core");
+
+                //  ensure fonts symlink folders
+                \Host\Object\FileCore::ensurePath("../www/fonts");
+                \Host\Object\FileCore::ensurePath("../www/fonts/core");
+
                 //  if windows
                 if(thisIsWindows())
                 {
